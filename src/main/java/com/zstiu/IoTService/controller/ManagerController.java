@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +34,11 @@ public class ManagerController {
     @Autowired
     private ManagerServiceImp managerService;
 
+    @ApiOperation(value="管理员登录", notes="登录成功返回管理员信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "String", name = "managerName", value = "管理员用户名", required = true, paramType = "path"),
+            @ApiImplicitParam(dataType = "String", name = "password", value = "管理员密码", required = true, paramType = "path")
+    })
     @RequestMapping(value="/login", method= RequestMethod.POST)
     public ResponseBody login(HttpServletRequest request, HttpServletResponse response,
                         @RequestBody Map<String, Object> params) throws Exception {

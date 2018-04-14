@@ -71,7 +71,7 @@ public class User {
         return manager;
     }
 
-    public void setOrder(Manager manager) {
+    public void setManager(Manager manager) {
         this.manager = manager;
     }
 
