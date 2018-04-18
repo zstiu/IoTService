@@ -5,13 +5,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
-/**
- * Created by Administrator on 2018/4/14.
- */
 @Entity
-public class Device {
+public class Datastream {
     @Id
     @GeneratedValue
     private Long id;
@@ -19,21 +15,12 @@ public class Device {
     @Column(nullable = false)
     private String tags;
 
-    @Column(nullable = false)
-    private boolean online;
     @Column(nullable = true)
-    private String protocol;
+    private String unit;
     @Column(nullable = true)
-    private String title;
+    private String unit_symbol;
     @Column(nullable = true)
-    private String description;
-    @Column(nullable = true)
-//    private String private;
-    private String location;
-    @Column(nullable = true)
-    private String authInfo;
-    @Column(nullable = true)
-    private String other;
+    private String current_value;
 //    @Column(nullable = true)
 //    private String keys;
 
@@ -46,22 +33,22 @@ public class Device {
     /**
      * 修改时间
      */
-    @Column(name = "lastmodified_time")
+    @Column(name = "update_at")
     @LastModifiedDate
-    private Date lastmodifiedTime;
+    private Date update_at;
 
 //    @OneToMany(cascade={CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST},fetch=FetchType.LAZY,mappedBy="manager")
 //    private Set<User> users;
 
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
-    private Product product;
+    private Device device;
 
-    public Product getProduct() {
-        return product;
+    public Device getDevice() {
+        return device;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setDevice(Device device) {
+        this.device = device;
     }
 
 //    public Set<User> getUsers() {
@@ -87,12 +74,4 @@ public class Device {
     public void setTags(String tags) {
         this.tags = tags;
     }
-
-//    public boolean getOnline() {
-//        return online;
-//    }
-//
-//    public void setOnline(boolean online) {
-//        this.online = online;
-//    }
 }
