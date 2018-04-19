@@ -1,11 +1,13 @@
 package com.zstiu.IoTService.domain;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Datapointhistory {
     @Id
     @GeneratedValue
@@ -24,15 +26,15 @@ public class Datapointhistory {
 //    @OneToMany(cascade={CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST},fetch=FetchType.LAZY,mappedBy="manager")
 //    private Set<User> users;
 
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
-    private Datastream datastream;
+//    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
+    private Long datastream_id;
 
-    public Datastream getDatastream() {
-        return datastream;
+    public Long getDatastreamId() {
+        return datastream_id;
     }
 
-    public void setDatastream(Datastream datastream) {
-        this.datastream = datastream;
+    public void setDatastreamId(Long datastream_id) {
+        this.datastream_id = datastream_id;
     }
 
 //    public Set<User> getUsers() {

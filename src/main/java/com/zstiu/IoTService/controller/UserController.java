@@ -1,9 +1,15 @@
 package com.zstiu.IoTService.controller;
 
 import com.zstiu.IoTService.bean.ResponseBody;
+import com.zstiu.IoTService.domain.Manager;
+import com.zstiu.IoTService.domain.Product;
 import com.zstiu.IoTService.domain.User;
 import com.zstiu.IoTService.repository.UserRepository;
 import com.zstiu.IoTService.service.UserService;
+import com.zstiu.IoTService.service.impl.UserServiceImp;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +21,8 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping("/manager")
+@RestController
+@RequestMapping("/user")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(ManagerController.class);
 
@@ -38,6 +45,49 @@ public class UserController {
         return user;
     }
 
+    @ApiOperation(value="用户注册", notes="注册成功返回用户信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "String", name = "userName", value = "用户名", required = true, paramType = "path"),
+            @ApiImplicitParam(dataType = "String", name = "password", value = "密码", required = true, paramType = "path"),
+    })
+    @RequestMapping(value="/", method= RequestMethod.POST)
+    public ResponseBody signUp(HttpServletRequest request, HttpServletResponse response,
+                               @RequestBody Map<String, Object> params) throws Exception {
+        ResponseBody responseBody = new ResponseBody();
+
+        if (params.get("userName") == null || params.get("password") == null) {
+            responseBody.setMessage("缺少参数或者参数格式错误");
+            return responseBody;
+        }
+
+        String userName = params.get("userName") == "" ? "" : params.get("userName").toString();
+        String password = params.get("password") == "" ? "" : params.get("password").toString();
+
+
+        if(userRepository.findByName(userName) == null){
+            User user = new User();
+            user.setName(userName);
+            user.setPassword(password);
+
+            log.info(user.toString());
+            userService.addNewUser(user);
+
+            responseBody.setSuccess(true);
+            responseBody.setMessage("注册成功");
+            responseBody.setData(user);
+        }
+        else {
+            responseBody.setMessage("用户名已存在");
+        }
+
+        return responseBody;
+    }
+
+    @ApiOperation(value="用户登录", notes="登录成功返回用户信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "String", name = "userName", value = "用户名", required = true, paramType = "path"),
+            @ApiImplicitParam(dataType = "String", name = "password", value = "密码", required = true, paramType = "path")
+    })
     @RequestMapping(value="/login", method= RequestMethod.POST)
     public ResponseBody login(HttpServletRequest request, HttpServletResponse response,
                         @RequestBody Map<String, Object> params) throws Exception {

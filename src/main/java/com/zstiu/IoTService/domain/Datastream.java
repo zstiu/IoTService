@@ -2,11 +2,13 @@ package com.zstiu.IoTService.domain;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Datastream {
     @Id
     @GeneratedValue
@@ -40,15 +42,15 @@ public class Datastream {
 //    @OneToMany(cascade={CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST},fetch=FetchType.LAZY,mappedBy="manager")
 //    private Set<User> users;
 
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
-    private Device device;
+//    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
+    private Long device_id;
 
-    public Device getDevice() {
-        return device;
+    public Long getDeviceId() {
+        return device_id;
     }
 
-    public void setDevice(Device device) {
-        this.device = device;
+    public void setDeviceId(Long device_id) {
+        this.device_id = device_id;
     }
 
 //    public Set<User> getUsers() {

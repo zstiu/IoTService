@@ -7,11 +7,9 @@ import com.zstiu.IoTService.domain.Manager;
 import com.zstiu.IoTService.repository.ManagerRepository;
 import com.zstiu.IoTService.repository.ProductRepository;
 import com.zstiu.IoTService.repository.UserRepository;
-import com.zstiu.IoTService.service.ManagerService;
 
-import com.zstiu.IoTService.service.impl.ManagerServiceImp;
-import com.zstiu.IoTService.service.impl.UserServiceImp;
 import com.zstiu.IoTService.service.UserService;
+import com.zstiu.IoTService.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
@@ -40,9 +38,9 @@ public class ManagerController {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private ManagerServiceImp managerService;
+    private ManagerService managerService;
     @Autowired
-    private UserServiceImp userService;
+    private UserService userService;
 
 
     @ApiOperation(value="管理员注册", notes="注册成功返回管理员信息")
@@ -52,11 +50,11 @@ public class ManagerController {
             @ApiImplicitParam(dataType = "String", name = "APIKey", value = "对应产品的APIKey", required = true, paramType = "path")
     })
     @RequestMapping(value="/", method= RequestMethod.POST)
-    public ResponseBody siginup(HttpServletRequest request, HttpServletResponse response,
+    public ResponseBody signUp(HttpServletRequest request, HttpServletResponse response,
                               @RequestBody Map<String, Object> params) throws Exception {
         ResponseBody responseBody = new ResponseBody();
 
-        if (params.get("managerName") == null || params.get("password") == null) {
+        if (params.get("managerName") == null || params.get("password") == null || params.get("APIKey") == null) {
             responseBody.setMessage("缺少参数或者参数格式错误");
             return responseBody;
         }
@@ -66,16 +64,24 @@ public class ManagerController {
         String APIKey = params.get("APIKey") == "" ? "" : params.get("APIKey").toString();
 
         Product product = productRepository.findByAPIKey(APIKey);
-        Manager manager = new Manager();
-        manager.setProduct(product);
-        manager.setName(managerName);
-        manager.setPassword(password);
 
-        managerService.addManger(manager);
 
-        responseBody.setSuccess(true);
-        responseBody.setMessage("注册成功");
-        responseBody.setData(manager);
+        if(managerRepository.findByName(managerName) == null){
+            Manager manager = new Manager();
+            manager.setProductId(product.getId());
+            manager.setName(managerName);
+            manager.setPassword(password);
+
+            responseBody.setSuccess(true);
+            responseBody.setMessage("注册成功");
+            responseBody.setData(managerService.addManager(manager));
+        }
+        else if(product == null){
+            responseBody.setMessage("APIKey不存在相应产品");
+        }
+        else {
+            responseBody.setMessage("用户名已存在");
+        }
 
         return responseBody;
     }
@@ -200,7 +206,7 @@ public class ManagerController {
         String userName = params.get("userName") == "" ? "" : params.get("userName").toString();
         String password = params.get("password") == "" ? "" : params.get("password").toString();
 
-        addedUser.setManager(currentManger);
+        addedUser.setManagerId(currentManger.getId());
         addedUser.setName(userName);
         addedUser.setPassword(password);
 

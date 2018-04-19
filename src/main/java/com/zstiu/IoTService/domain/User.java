@@ -1,21 +1,16 @@
 package com.zstiu.IoTService.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 import java.util.Date;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Created by Administrator on 2018/1/18.
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class User {
     //
     @Id
@@ -63,16 +58,17 @@ public class User {
      * JoinColumn:指定外键名
      *
      */
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
-//    @JoinColumn(name="id")
-    private Manager manager;
+//    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=true)
+//    @JoinColumn(nullable = true)
+    @Column(nullable = true)
+    private Long manager_id;
 
-    public Manager getManager() {
-        return manager;
+    public Long getManagerId() {
+        return manager_id;
     }
 
-    public void setManager(Manager manager) {
-        this.manager = manager;
+    public void setManagerId(Long manager_id) {
+        this.manager_id = manager_id;
     }
 
     private Date date;
@@ -107,12 +103,8 @@ public class User {
         this.password = password;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
+    public String toString(){
+        return "User:name="+this.name + ",password:"+this.password+",manager_id:"+this.manager_id;
     }
 
 }

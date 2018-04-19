@@ -30,7 +30,7 @@ public class ManagerServiceImp implements ManagerService{
         }
     }
 
-    public void addManger(Manager manager){
-        managerRepository.save(manager);
+    public Manager addManager(Manager manager){
+        return managerRepository.save(manager);
     }
 }
