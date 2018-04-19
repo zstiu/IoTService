@@ -15,13 +15,13 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class Device {
     @Id
-    @GeneratedValue
-    private Long id;
+//    @GeneratedValue
+    private int id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String tags;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private boolean online;
     @Column(nullable = true)
     private String protocol;
@@ -29,13 +29,13 @@ public class Device {
     private String title;
     @Column(nullable = true)
     private String description;
-    @Column(nullable = true)
-//    private String private;
-    private String location;
+//    @Column(nullable = true)
+////    private String private;
+//    private String location;
     @Column(nullable = true)
     private String authInfo;
-    @Column(nullable = true)
-    private String other;
+//    @Column(nullable = true)
+//    private String other;
 //    @Column(nullable = true)
 //    private String keys;
 
@@ -74,11 +74,11 @@ public class Device {
 //        this.users = users;
 //    }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -88,6 +88,38 @@ public class Device {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
+    public boolean getOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+
+    public String getAuthInfo() {
+        return authInfo;
+    }
+
+    public void setAuthInfo(String authInfo) {
+        this.authInfo = authInfo;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 //    public boolean getOnline() {

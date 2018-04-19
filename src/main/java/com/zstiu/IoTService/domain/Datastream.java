@@ -43,13 +43,13 @@ public class Datastream {
 //    private Set<User> users;
 
 //    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
-    private Long device_id;
+    private int device_id;
 
-    public Long getDeviceId() {
+    public int getDeviceId() {
         return device_id;
     }
 
-    public void setDeviceId(Long device_id) {
+    public void setDeviceId(int device_id) {
         this.device_id = device_id;
     }
 
