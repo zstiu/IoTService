@@ -29,4 +29,8 @@ public class ManagerServiceImp implements ManagerService{
             return false;
         }
     }
+
+    public Manager addManager(Manager manager){
+        return managerRepository.save(manager);
+    }
 }

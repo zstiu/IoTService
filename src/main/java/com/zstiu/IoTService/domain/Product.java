@@ -1,7 +1,9 @@
 package com.zstiu.IoTService.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +13,8 @@ import java.util.Set;
  * Created by Administrator on 2018/4/14.
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
+//@JsonIgnore
 public class Product {
     @Id
     @GeneratedValue
@@ -32,16 +36,16 @@ public class Product {
     @LastModifiedDate
     private Date lastmodifiedTime;
 
-    @OneToMany(cascade={CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST},fetch=FetchType.LAZY,mappedBy="product")
-    private Set<Manager> managers;
+//    @OneToMany(cascade={CascadeType.REFRESH,CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST},fetch=FetchType.LAZY,mappedBy="product")
+//    private Set<Manager> managers;
+//
+//    public Set<Manager> getManagers() {
+//        return managers;
+//    }
 
-    public Set<Manager> getManagers() {
-        return managers;
-    }
-
-    public void setManagers(Set<Manager> managers) {
-        this.managers = managers;
-    }
+//    public void setManagers(Set<Manager> managers) {
+//        this.managers = managers;
+//    }
 
     public Long getId() {
         return id;

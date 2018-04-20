@@ -12,7 +12,7 @@ public interface ManagerRepository extends JpaRepository<Manager, Long>  {
 
 //    Manager findAllById();
 
-        Manager findByName(String managerName);
+    Manager findByName(String managerName);
 
     @Query("from Manager u where u.name=:name")
     Manager findManager(@Param("name") String name);
