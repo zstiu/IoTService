@@ -1,20 +1,28 @@
 package com.zstiu.IoTService.domain;
 
+import com.zstiu.IoTService.domain.PK.DatastreamPK;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@IdClass(DatastreamPK.class)
 @Data
-public class Datastream {
+public class Datastream implements Serializable {
+    private static final long serialVersionUID = -906357110051689484L;
+
+//    @Id
+//    @GeneratedValue
+//    private String auto_id;
     @Id
-    @GeneratedValue
-    private Long id;
+//    @GeneratedValue
+    private String id;
 
     @Column(nullable = false)
     private String tags;
@@ -25,6 +33,8 @@ public class Datastream {
     private String unit_symbol;
     @Column(nullable = true)
     private String current_value;
+
+    private String uuid;
 //    @Column(nullable = true)
 //    private String keys;
 
@@ -45,7 +55,8 @@ public class Datastream {
 //    private Set<User> users;
 
 //    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
-    private int device_id;
+    @Id
+    private Long device_id;
 
 //    public int getDeviceId() {
 //        return device_id;

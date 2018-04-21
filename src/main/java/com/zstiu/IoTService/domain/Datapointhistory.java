@@ -29,7 +29,7 @@ public class Datapointhistory {
 //    private Set<User> users;
 
 //    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
-    private Long datastream_id;
+    private String datastream_id;
 
 //    public Long getDatastreamId() {
 //        return datastream_id;

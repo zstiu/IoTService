@@ -2,7 +2,9 @@ package com.zstiu.IoTService.schedule;
 
 import com.zstiu.IoTService.bean.OnenetResponse;
 import com.zstiu.IoTService.bean.ResponseBody;
+import com.zstiu.IoTService.domain.Datastream;
 import com.zstiu.IoTService.domain.Device;
+import com.zstiu.IoTService.service.DatastreamService;
 import com.zstiu.IoTService.service.DeviceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @Component
 public class updateDB {
@@ -26,13 +29,16 @@ public class updateDB {
 
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private DatastreamService datastreamService;
 
     @Scheduled(fixedRate = 5000)
     public void test(){
         log.info("service is still running at " + new Date());
     }
 
-    @Scheduled(fixedRate = 360000)
+//    @Scheduled(fixedRate = 360000)
+    @Scheduled(fixedRate = 5000)
     public void updateService(){
         HashMap<String, String> map = new HashMap<>();
         map.put("per_page","100");
@@ -59,6 +65,42 @@ public class updateDB {
 
             deviceService.updateDevice(device);
 
+            updateDataStreams(Long.parseLong((String) _device.get("id")));
+
         }
+    }
+
+    public void updateDataStreams(Long id){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("per_page","100");
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("api-key", "yFklxQD=vZhpdKTQYkU=FQ65Txo=");
+
+        HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);
+
+        String url = "http://api.heclouds.com/devices/" + id.toString() + "/datastreams";
+
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity, Object.class, map);
+        HashMap<String, Object> onenetResponse = (HashMap<String, Object>) responseEntity.getBody();
+//        HashMap<String, Object> data = (HashMap<String, Object>) onenetResponse.get("data");
+
+        ArrayList<HashMap<String, Object>> datastreams = (ArrayList<HashMap<String, Object>>) onenetResponse.get("data");
+
+        for (HashMap<String, Object> _datastream:datastreams){
+            Datastream datastream = new Datastream();
+            datastream.setId((String) _datastream.get("id"));
+            datastream.setDevice_id(id);
+            datastream.setUuid((String) _datastream.get("uuid"));
+            datastream.setUnit_symbol((String) _datastream.get("unit_symbol"));
+            datastream.setUnit((String) _datastream.get("unit"));
+//            datastream.setTags( _datastream.get("tags"));
+//            datastream.setTags(String.Join(",", (String[])_datastream.get("tags").ToArray(typeof(String))));
+
+            datastreamService.updateDataStream(datastream);
+
+        }
+
     }
 }
