@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class DeviceServiceImp implements DeviceService {
 
@@ -19,5 +22,15 @@ public class DeviceServiceImp implements DeviceService {
     @Override
     public void updateDevice(Device device) {
         deviceRepository.saveAndFlush(device);
+    }
+
+    @Override
+    public List<Device> getAll() {
+        return deviceRepository.findAll();
+    }
+
+    @Override
+    public Device getById(Long id) {
+        return deviceRepository.getOne(id);
     }
 }

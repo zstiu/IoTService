@@ -29,10 +29,10 @@ public class updateDB {
 
     @Scheduled(fixedRate = 5000)
     public void test(){
-        log.info("service is running at " + new Date());
+        log.info("service is still running at " + new Date());
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 360000)
     public void updateService(){
         HashMap<String, String> map = new HashMap<>();
         map.put("per_page","100");
@@ -51,7 +51,7 @@ public class updateDB {
 
         for (HashMap<String, Object> _device:devices){
             Device device = new Device();
-            device.setId(Integer.parseInt((String) _device.get("id")));
+            device.setId(Long.parseLong((String) _device.get("id")));
             device.setProtocol((String) _device.get("protocol"));
             device.setOnline((Boolean) _device.get("online"));
             device.setAuthInfo((String) _device.get("auth_info"));

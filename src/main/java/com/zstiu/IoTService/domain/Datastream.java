@@ -1,5 +1,6 @@
 package com.zstiu.IoTService.domain;
 
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Data
 public class Datastream {
     @Id
     @GeneratedValue
@@ -45,35 +47,35 @@ public class Datastream {
 //    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
     private int device_id;
 
-    public int getDeviceId() {
-        return device_id;
-    }
-
-    public void setDeviceId(int device_id) {
-        this.device_id = device_id;
-    }
-
-//    public Set<User> getUsers() {
-//        return users;
+//    public int getDeviceId() {
+//        return device_id;
 //    }
 //
-//    public void setUsers(Set<User> users) {
-//        this.users = users;
+//    public void setDeviceId(int device_id) {
+//        this.device_id = device_id;
 //    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
+//
+////    public Set<User> getUsers() {
+////        return users;
+////    }
+////
+////    public void setUsers(Set<User> users) {
+////        this.users = users;
+////    }
+//
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public String getTags() {
+//        return tags;
+//    }
+//
+//    public void setTags(String tags) {
+//        this.tags = tags;
+//    }
 }
