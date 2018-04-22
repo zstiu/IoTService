@@ -2,6 +2,9 @@ package com.zstiu.IoTService.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Data
 public class User {
     //
     @Id
@@ -18,10 +22,14 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String name;
 
     @Column(nullable = false)
     private String password;
+
+//    @Column(nullable = false)
+    private String type;
 
     /**
      * 创建时间
@@ -62,46 +70,6 @@ public class User {
 //    @JoinColumn(nullable = true)
     @Column(nullable = true)
     private Long manager_id;
-
-    public Long getManagerId() {
-        return manager_id;
-    }
-
-    public void setManagerId(Long manager_id) {
-        this.manager_id = manager_id;
-    }
-
-    private Date date;
-
-    public User(){}
-
-    public User(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String toString(){
         return "User:name="+this.name + ",password:"+this.password+",manager_id:"+this.manager_id;

@@ -3,6 +3,7 @@ package com.zstiu.IoTService.domain;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,6 +18,7 @@ import java.util.Date;
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Data
 public class Manager {
     @Id
     @GeneratedValue
@@ -47,44 +49,4 @@ public class Manager {
 //    @JsonIgnore
 //    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
     private Long product_id;
-
-    public Long getProductId() {
-        return product_id;
-    }
-
-    public void setProductId(Long product_id) {
-        this.product_id = product_id;
-    }
-
-//    public Set<User> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(Set<User> users) {
-//        this.users = users;
-//    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

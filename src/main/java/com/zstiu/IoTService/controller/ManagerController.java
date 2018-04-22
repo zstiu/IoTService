@@ -6,23 +6,21 @@ import com.zstiu.IoTService.domain.User;
 import com.zstiu.IoTService.domain.Manager;
 import com.zstiu.IoTService.repository.ManagerRepository;
 import com.zstiu.IoTService.repository.ProductRepository;
-import com.zstiu.IoTService.repository.UserRepository;
 
+import com.zstiu.IoTService.requestBody.SignUpUser;
+import com.zstiu.IoTService.requestBody.LoginManager;
+import com.zstiu.IoTService.requestBody.SignUpManager;
 import com.zstiu.IoTService.service.UserService;
 import com.zstiu.IoTService.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2018/3/15.
@@ -44,31 +42,38 @@ public class ManagerController {
 
 
     @ApiOperation(value="管理员注册", notes="注册成功返回管理员信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "String", name = "managerName", value = "管理员用户名", required = true, paramType = "path"),
-            @ApiImplicitParam(dataType = "String", name = "password", value = "管理员密码", required = true, paramType = "path"),
-            @ApiImplicitParam(dataType = "String", name = "APIKey", value = "对应产品的APIKey", required = true, paramType = "path")
-    })
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(dataType = "String", name = "managerName", value = "管理员用户名", required = true, paramType = "path"),
+//            @ApiImplicitParam(dataType = "String", name = "password", value = "管理员密码", required = true, paramType = "path"),
+//            @ApiImplicitParam(dataType = "String", name = "APIKey", value = "对应产品的APIKey", required = true, paramType = "path")
+//    })
     @RequestMapping(value="/", method= RequestMethod.POST)
     public ResponseBody signUp(HttpServletRequest request, HttpServletResponse response,
-                              @RequestBody Map<String, Object> params) throws Exception {
+                               @RequestBody SignUpManager signUpManager) throws Exception {
+//                               @ApiParam(name="managerName",value="管理员用户名",required=true) @RequestParam(name = "managerName") String managerName,
+//                               @ApiParam(name="password",value="管理员密码",required=true) @RequestParam(name = "password") String password,
+//                               @ApiParam(name="APIKey",value="对应产品的APIKey",required=true) @RequestParam(name = "APIKey") String APIKey) throws Exception {
+
         ResponseBody responseBody = new ResponseBody();
 
-        if (params.get("managerName") == null || params.get("password") == null || params.get("APIKey") == null) {
+        if (signUpManager.getManagerName() == null || signUpManager.getPassword() == null || signUpManager.getApiKey() == null) {
             responseBody.setMessage("缺少参数或者参数格式错误");
             return responseBody;
         }
 
-        String managerName = params.get("managerName") == "" ? "" : params.get("managerName").toString();
-        String password = params.get("password") == "" ? "" : params.get("password").toString();
-        String APIKey = params.get("APIKey") == "" ? "" : params.get("APIKey").toString();
+//        String managerName = params.get("managerName") == "" ? "" : params.get("managerName").toString();
+//        String password = params.get("password") == "" ? "" : params.get("password").toString();
+//        String APIKey = params.get("APIKey") == "" ? "" : params.get("APIKey").toString();
+        String managerName = signUpManager.getManagerName();
+        String password = signUpManager.getPassword();
+        String APIKey = signUpManager.getApiKey();
 
         Product product = productRepository.findByAPIKey(APIKey);
 
 
         if(managerRepository.findByName(managerName) == null){
             Manager manager = new Manager();
-            manager.setProductId(product.getId());
+            manager.setProduct_id(product.getId());
             manager.setName(managerName);
             manager.setPassword(password);
 
@@ -88,20 +93,28 @@ public class ManagerController {
 
 
     @ApiOperation(value="管理员登录", notes="登录成功返回管理员信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "String", name = "managerName", value = "管理员用户名", required = true, paramType = "path"),
-            @ApiImplicitParam(dataType = "String", name = "password", value = "管理员密码", required = true, paramType = "path")
-    })
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(dataType = "String", name = "managerName", value = "管理员用户名", required = true, example = "test1", paramType = "body"),
+//            @ApiImplicitParam(dataType = "String", name = "password", value = "管理员密码", required = true, example = "123456", paramType = "body")
+//    })
     @RequestMapping(value="/login", method= RequestMethod.POST)
     public ResponseBody login(HttpServletRequest request, HttpServletResponse response,
-                        @RequestBody Map<String, Object> params) throws Exception {
+//                              @RequestParam("managerName") String managerName,
+//                              @RequestParam("password") String password) throws Exception {
+                        @RequestBody LoginManager loginManager) throws Exception {
+//    @ApiOperation(value="管理员登录", notes="登录成功返回管理员信息")
+//    @PostMapping("/login")
+//    public ResponseBody login(HttpServletRequest request, HttpServletResponse response,
+//                              @ApiParam(name="managerName",value="管理员用户名",required=true) String managerName,
+//                              @ApiParam(name="password",value="管理员密码",required=true) String password) throws Exception {
 
 //        Map<String,Object> respBody = new HashMap<String,Object>();
         ResponseBody responseBody = new ResponseBody();
 
         if (request.getSession().getAttribute("managerName") != null) {
 //            logger.info("用户名：" + request.getSession().getAttribute("username").toString());
-            String managerName = request.getSession().getAttribute("managerName").toString();
+//            String managerName = request.getSession().getAttribute("managerName").toString();
+            String managerName = loginManager.getManagerName();
             log.info("managerName:"+ managerName);
             Manager manager = managerRepository.findManager(managerName);
             if (manager == null) {
@@ -116,13 +129,16 @@ public class ManagerController {
             return responseBody;
         }
 
-        if (params.get("managerName") == null || params.get("password") == null) {
+//        if (params.get("managerName") == null || params.get("password") == null) {
+        if (loginManager.getManagerName() == null || loginManager.getPassword() == null) {
             responseBody.setMessage("缺少参数或者参数格式错误");
             return responseBody;
         }
 
-        String managerName = params.get("managerName") == "" ? "" : params.get("managerName").toString();
-        String password = params.get("password") == "" ? "" : params.get("password").toString();
+//        String managerName = params.get("managerName") == "" ? "" : params.get("managerName").toString();
+//        String password = params.get("password") == "" ? "" : params.get("password").toString();
+        String managerName = loginManager.getManagerName();
+        String password = loginManager.getPassword();
 //        logger.info("login params: " + params);
         HttpSession session = request.getSession(false);
         Manager manager = managerRepository.findManager(managerName);
@@ -147,6 +163,7 @@ public class ManagerController {
 //            }
             responseBody.setData(manager);
             responseBody.setSuccess(true);
+            responseBody.setMessage("登录成功");
             return responseBody;
         } else {
             System.out.println("su");
@@ -171,13 +188,13 @@ public class ManagerController {
     }
 
     @ApiOperation(value="管理员添加普通用户", notes="添加成功返回用户信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "String", name = "userName", value = "用户名", required = true, paramType = "path"),
-            @ApiImplicitParam(dataType = "String", name = "password", value = "用户密码", required = true, paramType = "path")
-    })
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(dataType = "String", name = "userName", value = "用户名", required = true, paramType = "path"),
+//            @ApiImplicitParam(dataType = "String", name = "password", value = "用户密码", required = true, paramType = "path")
+//    })
     @RequestMapping(value="/user", method= RequestMethod.POST)
     public ResponseBody addUser(HttpServletRequest request, HttpServletResponse response,
-                              @RequestBody Map<String, Object> params) throws Exception{
+                                @RequestBody SignUpUser signUpUser) throws Exception{
         ResponseBody responseBody = new ResponseBody();
 
         Manager currentManger = new Manager();
@@ -196,19 +213,21 @@ public class ManagerController {
             return responseBody;
         }
 
-        if (params.get("userName") == null || params.get("password") == null) {
+        if (signUpUser.getUserName() == null || signUpUser.getPassword() == null) {
             responseBody.setMessage("缺少参数或者参数格式错误");
             return responseBody;
         }
 
         User addedUser = new User();
 
-        String userName = params.get("userName") == "" ? "" : params.get("userName").toString();
-        String password = params.get("password") == "" ? "" : params.get("password").toString();
+        String userName = signUpUser.getUserName();
+        String password = signUpUser.getPassword();
+        String type = signUpUser.getType();
 
-        addedUser.setManagerId(currentManger.getId());
+        addedUser.setManager_id(currentManger.getId());
         addedUser.setName(userName);
         addedUser.setPassword(password);
+        addedUser.setType(type);
 
         userService.addNewUser(addedUser);
 

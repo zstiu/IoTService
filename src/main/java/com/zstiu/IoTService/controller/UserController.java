@@ -1,25 +1,19 @@
 package com.zstiu.IoTService.controller;
 
 import com.zstiu.IoTService.bean.ResponseBody;
-import com.zstiu.IoTService.domain.Manager;
-import com.zstiu.IoTService.domain.Product;
 import com.zstiu.IoTService.domain.User;
 import com.zstiu.IoTService.repository.UserRepository;
+import com.zstiu.IoTService.requestBody.LoginUser;
+import com.zstiu.IoTService.requestBody.SignUpUser;
 import com.zstiu.IoTService.service.UserService;
-import com.zstiu.IoTService.service.impl.UserServiceImp;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -32,42 +26,49 @@ public class UserController {
     private UserRepository userRepository;
 
     // @PathVariable 获得请求url中的动态参数
-    @RequestMapping(value = "/get/{name}")
-    public User getUser(@PathVariable String name) {
-        User user = new User();
-//        UserRepository userRepository = new User();
-
-//        user.setId(id);
-//        user.setName(name);
-//        user.setDate(new Date());
+//    @RequestMapping(value = "/get/{name}")
+//    public User getUser(@PathVariable String name) {
+//        User user = new User();
+////        UserRepository userRepository = new User();
+//
+////        user.setId(id);
+////        user.setName(name);
+////        user.setDate(new Date());
+////        return user;
+//        user = userRepository.findUser(name);
 //        return user;
-        user = userRepository.findUser(name);
-        return user;
-    }
+//    }
 
     @ApiOperation(value="用户注册", notes="注册成功返回用户信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "String", name = "userName", value = "用户名", required = true, paramType = "path"),
-            @ApiImplicitParam(dataType = "String", name = "password", value = "密码", required = true, paramType = "path"),
-    })
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(dataType = "String", name = "userName", value = "用户名", required = true, paramType = "query",defaultValue="test1"),
+//            @ApiImplicitParam(dataType = "String", name = "password", value = "密码", required = true, paramType = "query",defaultValue="123456"),
+//            @ApiImplicitParam(dataType = "String", name = "type", value = "用户类型", required = true, paramType = "query",defaultValue="Cargo company"),
+//    })
+//    @ApiResponses({
+//         @ApiResponse(code=400,message="请求参数没填好"),
+//         @ApiResponse(code=404,message="请求路径没有或页面跳转路径不对")
+//     })
     @RequestMapping(value="/", method= RequestMethod.POST)
-    public ResponseBody signUp(HttpServletRequest request, HttpServletResponse response,
-                               @RequestBody Map<String, Object> params) throws Exception {
+    public ResponseBody signUp(@RequestBody SignUpUser signUpUser
+                               ) throws Exception {
         ResponseBody responseBody = new ResponseBody();
 
-        if (params.get("userName") == null || params.get("password") == null) {
+        if (signUpUser.getUserName() == null || signUpUser.getPassword() == null || signUpUser.getType() == null) {
             responseBody.setMessage("缺少参数或者参数格式错误");
             return responseBody;
         }
 
-        String userName = params.get("userName") == "" ? "" : params.get("userName").toString();
-        String password = params.get("password") == "" ? "" : params.get("password").toString();
+        String userName = signUpUser.getUserName();
+        String password = signUpUser.getPassword();
+        String type = signUpUser.getType();
 
 
         if(userRepository.findByName(userName) == null){
             User user = new User();
             user.setName(userName);
             user.setPassword(password);
+            user.setType(type);
 
             log.info(user.toString());
             userService.addNewUser(user);
@@ -84,20 +85,22 @@ public class UserController {
     }
 
     @ApiOperation(value="用户登录", notes="登录成功返回用户信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "String", name = "userName", value = "用户名", required = true, paramType = "path"),
-            @ApiImplicitParam(dataType = "String", name = "password", value = "密码", required = true, paramType = "path")
-    })
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(dataType = "String", name = "userName", value = "用户名", required = true, paramType = "path"),
+//            @ApiImplicitParam(dataType = "String", name = "password", value = "密码", required = true, paramType = "path")
+//    })
     @RequestMapping(value="/login", method= RequestMethod.POST)
-    public ResponseBody login(HttpServletRequest request, HttpServletResponse response,
-                        @RequestBody Map<String, Object> params) throws Exception {
+    public ResponseBody login(HttpServletRequest request,
+                              @RequestBody LoginUser loginUser) throws Exception {
 
         ResponseBody responseBody = new ResponseBody();
 
-        if (request.getSession().getAttribute("userName") != null) {
+        if (request.getSession().getAttribute("userName") != null && request.getSession().getAttribute("userType") != null) {
 //            logger.info("用户名：" + request.getSession().getAttribute("username").toString());
             String userName = request.getSession().getAttribute("userName").toString();
+            String userType = request.getSession().getAttribute("userType").toString();
             log.info("userName:"+ userName);
+            log.info("userType:"+ userType);
             User user = userRepository.findUser(userName);
             if (user == null) {
                 request.setAttribute("info", "会话已失效,请重新登陆(user已被删除)!");
@@ -107,17 +110,17 @@ public class UserController {
             }
             responseBody.setData(user);
             responseBody.setSuccess(true);
-            responseBody.setMessage("您已登录");
+            responseBody.setMessage("您已登录(身份：" + userType + ")");
             return responseBody;
         }
 
-        if (params.get("userName") == null || params.get("password") == null) {
+        if (loginUser.getUserName() == null || loginUser.getPassword() == null) {
             responseBody.setMessage("缺少参数或者参数格式错误");
             return responseBody;
         }
 
-        String userName = params.get("userName") == "" ? "" : params.get("userName").toString();
-        String password = params.get("password") == "" ? "" : params.get("password").toString();
+        String userName = loginUser.getUserName();
+        String password = loginUser.getPassword();
 //        logger.info("login params: " + params);
         HttpSession session = request.getSession(false);
         User user = userRepository.findUser(userName);
@@ -128,6 +131,7 @@ public class UserController {
 //            logger.info("验证通过");
             session.setAttribute("userId", user.getId());
             session.setAttribute("userName", user.getName());
+            session.setAttribute("userType", user.getType());
 //            session.setAttribute("userName", user.get("USER_NAME"));
 //            session.setAttribute("displayName", user.get("USER_NAME"));
 //            session.setAttribute("locale", "zh_CN");
@@ -142,6 +146,7 @@ public class UserController {
 //            }
             responseBody.setData(user);
             responseBody.setSuccess(true);
+            responseBody.setMessage("登录成功");
             return responseBody;
         } else {
             if (userName == "" && password == "") {

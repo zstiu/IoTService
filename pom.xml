@@ -99,6 +99,19 @@
 			<artifactId>spring-session-data-redis</artifactId>
 		</dependency>
 
+		<!--热自启-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-devtools</artifactId>-->
+			<!--<optional>true</optional>-->
+		<!--</dependency>-->
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.10</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -106,6 +119,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

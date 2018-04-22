@@ -1,5 +1,7 @@
 package com.zstiu.IoTService.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,10 +15,12 @@ import java.util.Set;
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Data
+@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })
 public class Device {
     @Id
 //    @GeneratedValue
-    private int id;
+    private Long id;
 
     @Column(nullable = true)
     private String tags;
@@ -57,76 +61,4 @@ public class Device {
 
 //    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
     private Long product_id;
-
-    public Long getProductId() {
-        return product_id;
-    }
-
-    public void setProductId(Long product_id) {
-        this.product_id = product_id;
-    }
-
-//    public Set<User> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(Set<User> users) {
-//        this.users = users;
-//    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
-    public String getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-    }
-
-    public boolean getOnline() {
-        return online;
-    }
-
-    public void setOnline(boolean online) {
-        this.online = online;
-    }
-
-    public String getAuthInfo() {
-        return authInfo;
-    }
-
-    public void setAuthInfo(String authInfo) {
-        this.authInfo = authInfo;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-//    public boolean getOnline() {
-//        return online;
-//    }
-//
-//    public void setOnline(boolean online) {
-//        this.online = online;
-//    }
 }

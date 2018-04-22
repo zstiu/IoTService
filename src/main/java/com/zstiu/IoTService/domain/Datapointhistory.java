@@ -1,5 +1,7 @@
 package com.zstiu.IoTService.domain;
 
+import com.zstiu.IoTService.domain.PK.DatapointhitoryPK;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -8,10 +10,16 @@ import java.util.Date;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@IdClass(DatapointhitoryPK.class)
+@Data
 public class Datapointhistory {
     @Id
-    @GeneratedValue
-    private Long id;
+//    @GeneratedValue
+    private String at;
+    @Id
+    private String datastream_id;
+    @Id
+    private Long datastream_device_id;
 
     @Column(nullable = false)
     private String value;
@@ -27,37 +35,36 @@ public class Datapointhistory {
 //    private Set<User> users;
 
 //    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
-    private Long datastream_id;
 
-    public Long getDatastreamId() {
-        return datastream_id;
-    }
-
-    public void setDatastreamId(Long datastream_id) {
-        this.datastream_id = datastream_id;
-    }
-
-//    public Set<User> getUsers() {
-//        return users;
+//    public Long getDatastreamId() {
+//        return datastream_id;
 //    }
 //
-//    public void setUsers(Set<User> users) {
-//        this.users = users;
+//    public void setDatastreamId(Long datastream_id) {
+//        this.datastream_id = datastream_id;
 //    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
+//
+////    public Set<User> getUsers() {
+////        return users;
+////    }
+////
+////    public void setUsers(Set<User> users) {
+////        this.users = users;
+////    }
+//
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public String getValue() {
+//        return value;
+//    }
+//
+//    public void setValue(String value) {
+//        this.value = value;
+//    }
 }

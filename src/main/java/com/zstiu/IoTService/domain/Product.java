@@ -1,6 +1,7 @@
 package com.zstiu.IoTService.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,6 +15,7 @@ import java.util.Set;
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Data
 //@JsonIgnore
 public class Product {
     @Id
@@ -47,19 +49,4 @@ public class Product {
 //        this.managers = managers;
 //    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getAPIKey() {
-        return APIKey;
-    }
-
-    public void setAPIKey(String APIKey) {
-        this.APIKey = APIKey;
-    }
 }
