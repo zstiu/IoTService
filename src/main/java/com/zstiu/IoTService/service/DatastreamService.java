@@ -12,5 +12,7 @@ public interface DatastreamService {
 
     public List<Datastream> getAll();
 
-    public Datastream getById(Long id);
+    public List<Datastream> getByDevice_id(Long device_id);
+
+    public Datastream getByIdAndDevice_id(Long device_id, String id);
 }

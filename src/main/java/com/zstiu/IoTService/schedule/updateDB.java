@@ -2,8 +2,10 @@ package com.zstiu.IoTService.schedule;
 
 import com.zstiu.IoTService.bean.OnenetResponse;
 import com.zstiu.IoTService.bean.ResponseBody;
+import com.zstiu.IoTService.domain.Datapointhistory;
 import com.zstiu.IoTService.domain.Datastream;
 import com.zstiu.IoTService.domain.Device;
+import com.zstiu.IoTService.service.DatapointhistoryService;
 import com.zstiu.IoTService.service.DatastreamService;
 import com.zstiu.IoTService.service.DeviceService;
 import org.slf4j.Logger;
@@ -31,14 +33,16 @@ public class updateDB {
     private DeviceService deviceService;
     @Autowired
     private DatastreamService datastreamService;
+    @Autowired
+    private DatapointhistoryService datapointhistoryService;
 
     @Scheduled(fixedRate = 5000)
     public void test(){
         log.info("service is still running at " + new Date());
     }
 
-//    @Scheduled(fixedRate = 360000)
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 360000)
+//    @Scheduled(fixedRate = 5000)
     public void updateService(){
         HashMap<String, String> map = new HashMap<>();
         map.put("per_page","100");
@@ -95,6 +99,22 @@ public class updateDB {
             datastream.setUuid((String) _datastream.get("uuid"));
             datastream.setUnit_symbol((String) _datastream.get("unit_symbol"));
             datastream.setUnit((String) _datastream.get("unit"));
+//            String a = _datastream.get("uni").toString();
+            try {
+                datastream.setCurrent_value( _datastream.get("current_value").toString());
+
+                Datapointhistory datapointhistory = new Datapointhistory();
+                datapointhistory.setValue(_datastream.get("current_value").toString());
+                datapointhistory.setDatastream_device_id(id);
+                datapointhistory.setDatastream_id((String) _datastream.get("id"));
+                datapointhistory.setAt((String) _datastream.get("update_at"));
+
+                datapointhistoryService.updateDatapointhistory(datapointhistory);
+
+            }catch (Exception e){
+                log.info("当前数据流：" + datastream.getId() + "---" + "无数据点上传");
+                log.error(e.getMessage());
+            }
 //            datastream.setTags( _datastream.get("tags"));
 //            datastream.setTags(String.Join(",", (String[])_datastream.get("tags").ToArray(typeof(String))));
 

@@ -30,11 +30,16 @@ public class DatastreamServiceImp implements DatastreamService {
 
     @Override
     public List<Datastream> getAll() {
-        return null;
+        return datastreamRepository.findAll();
     }
 
     @Override
-    public Datastream getById(Long id) {
-        return null;
+    public Datastream getByIdAndDevice_id(Long device_id, String id) {
+        return datastreamRepository.findByIdAndDevice_id(device_id, id);
+    }
+
+    @Override
+    public List<Datastream> getByDevice_id(Long device_id) {
+        return datastreamRepository.findByDevice_id(device_id);
     }
 }

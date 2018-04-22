@@ -1,5 +1,6 @@
 package com.zstiu.IoTService.domain;
 
+import com.zstiu.IoTService.domain.PK.DatapointhitoryPK;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -9,11 +10,16 @@ import java.util.Date;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@IdClass(DatapointhitoryPK.class)
 @Data
 public class Datapointhistory {
     @Id
-    @GeneratedValue
-    private Long id;
+//    @GeneratedValue
+    private String at;
+    @Id
+    private String datastream_id;
+    @Id
+    private Long datastream_device_id;
 
     @Column(nullable = false)
     private String value;
@@ -29,7 +35,6 @@ public class Datapointhistory {
 //    private Set<User> users;
 
 //    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},fetch=FetchType.EAGER,optional=false)
-    private String datastream_id;
 
 //    public Long getDatastreamId() {
 //        return datastream_id;
