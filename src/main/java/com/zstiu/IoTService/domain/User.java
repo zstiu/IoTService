@@ -22,9 +22,9 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    @JsonIgnore
     private String name;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 

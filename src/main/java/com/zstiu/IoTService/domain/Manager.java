@@ -28,6 +28,7 @@ public class Manager {
     private String name;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     /**
