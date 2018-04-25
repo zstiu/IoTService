@@ -17,4 +17,6 @@ public interface ManagerRepository extends JpaRepository<Manager, Long>  {
     @Query("from Manager u where u.name=:name")
     Manager findManager(@Param("name") String name);
 
+    Manager findById(Long id);
+
 }

@@ -7,6 +7,7 @@ import com.zstiu.IoTService.domain.Manager;
 import com.zstiu.IoTService.repository.ManagerRepository;
 import com.zstiu.IoTService.repository.ProductRepository;
 
+import com.zstiu.IoTService.repository.UserRepository;
 import com.zstiu.IoTService.requestBody.SignUpUser;
 import com.zstiu.IoTService.requestBody.LoginManager;
 import com.zstiu.IoTService.requestBody.SignUpManager;
@@ -33,6 +34,8 @@ public class ManagerController {
 
     @Autowired
     private ManagerRepository managerRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -169,16 +172,16 @@ public class ManagerController {
             System.out.println("su");
 //            logger.info("验证不通过");
             if (managerName == "" && password == "") {
-                request.setAttribute("info", "请输入用户名或密码!");
+                request.setAttribute("info", "请输入管理员名和密码!");
                 responseBody.setMessage("请输入用户名或密码!");
             } else if (managerName == "") {
-                request.setAttribute("info", "请输入用户名!");
+                request.setAttribute("info", "请输入管理员名!");
                 responseBody.setMessage("请输入用户名!");
             } else if (password == "") {
                 request.setAttribute("info", "请输入密码!");
                 responseBody.setMessage("请输入密码!");
             } else {
-                request.setAttribute("info", "用户名或密码错误!");
+                request.setAttribute("info", "管理员名或密码错误!");
                 responseBody.setMessage("用户名或密码错误!");
             }
 //            logger.info(request.getAttribute("info"));
@@ -224,6 +227,12 @@ public class ManagerController {
         String password = signUpUser.getPassword();
         String type = signUpUser.getType();
 
+        User userByName = userRepository.findByName(userName);
+        if (userByName != null ){
+            responseBody.setMessage("用户名已存在");
+            return responseBody;
+        }
+
         addedUser.setManager_id(currentManger.getId());
         addedUser.setName(userName);
         addedUser.setPassword(password);
@@ -237,5 +246,66 @@ public class ManagerController {
 
         return responseBody;
     }
+
+    @ApiOperation(value="获取id对应管理员信息", notes="返回管理员信息")
+    @RequestMapping(value="/{id}", method= RequestMethod.GET)
+    public ResponseBody managerById(HttpServletRequest request, HttpServletResponse response,
+                              @PathVariable Long id) throws Exception {
+        ResponseBody responseBody = new ResponseBody();
+
+        Manager manager = managerRepository.findById(id);
+//        logger.info(user);
+
+        if (manager != null) {
+                responseBody.setData(manager);
+                responseBody.setSuccess(true);
+                responseBody.setMessage("");
+                return responseBody;
+        } else {
+            responseBody.setSuccess(false);
+            responseBody.setMessage("无id对应管理员信息");
+            return responseBody;
+        }
+//        return responseBody;
+    }
+
+    @ApiOperation(value="修改管理员信息", notes="返回修改后的管理员信息")
+    @RequestMapping(value="/{id}", method= RequestMethod.PUT)
+    public ResponseBody putManagerById(HttpServletRequest request, HttpServletResponse response,
+                                        @PathVariable Long id,
+                                       @RequestBody LoginManager putManager) throws Exception {
+        ResponseBody responseBody = new ResponseBody();
+
+        Manager manager = managerRepository.findById(id);
+        manager.setId(id);
+        manager.setName(putManager.getManagerName());
+
+        Manager managerByName = managerRepository.findByName(putManager.getManagerName());
+
+        if(managerByName !=null && managerByName.getId() != id){
+            responseBody.setMessage("管理员名被占用");
+            return responseBody;
+        }
+
+        manager.setPassword((putManager.getPassword()));
+
+        try {
+
+            Manager editedManager = managerRepository.saveAndFlush(manager);
+            if(editedManager != null){
+                responseBody.setSuccess(true);
+                responseBody.setData(manager);
+                responseBody.setMessage("修改成功");
+            }else {
+                responseBody.setMessage("修改失败");
+            }
+        }catch (Exception e){
+            log.error("修改管理员信息失败：" + e);
+        }
+
+
+        return  responseBody;
+    }
+
 
 }

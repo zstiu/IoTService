@@ -165,4 +165,68 @@ public class UserController {
             return responseBody;
         }
     }
+
+    @ApiOperation(value="获取id对应用户信息", notes="返回用户信息")
+    @RequestMapping(value="/{id}", method= RequestMethod.GET)
+    public ResponseBody userById(HttpServletRequest request,
+                                    @PathVariable Long id) throws Exception {
+        ResponseBody responseBody = new ResponseBody();
+
+        User user = userRepository.findById(id);
+//        logger.info(user);
+
+        if (user != null) {
+            responseBody.setData(user);
+            responseBody.setSuccess(true);
+            responseBody.setMessage("");
+            return responseBody;
+        } else {
+            responseBody.setSuccess(false);
+            responseBody.setMessage("无id对应用户信息");
+            return responseBody;
+        }
+    }
+
+    @ApiOperation(value="修改用户信息", notes="返回修改后的用户信息")
+    @RequestMapping(value="/{id}", method= RequestMethod.PUT)
+    public ResponseBody putManagerById(HttpServletRequest request,
+                                       @PathVariable Long id,
+                                       @RequestBody SignUpUser putUser) throws Exception {
+        ResponseBody responseBody = new ResponseBody();
+
+        User user = userRepository.findById(id);
+        user.setId(id);
+        if (putUser.getUserName() != null) {
+            User userByName = userRepository.findByName(putUser.getUserName());
+            if(userByName !=null && userByName.getId() != id){
+                responseBody.setMessage("用户名被占用");
+                return responseBody;
+            }
+            user.setName(putUser.getUserName());
+        }
+        if (putUser.getPassword() != null) {
+            user.setPassword((putUser.getPassword()));
+        }
+        if (putUser.getType() != null) {
+            user.setType(putUser.getType());
+        }
+
+        try {
+
+            User editedUser = userRepository.saveAndFlush(user);
+            if(editedUser != null){
+                responseBody.setSuccess(true);
+                responseBody.setData(user);
+                responseBody.setMessage("修改成功");
+            }else {
+                responseBody.setMessage("修改失败");
+            }
+        }catch (Exception e){
+            log.error("修改用户信息失败：" + e);
+        }
+
+
+        return  responseBody;
+    }
+
 }
