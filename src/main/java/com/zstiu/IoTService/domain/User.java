@@ -21,10 +21,10 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
-    @JsonIgnore
+    @Column(nullable = false, unique=true)
     private String name;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
