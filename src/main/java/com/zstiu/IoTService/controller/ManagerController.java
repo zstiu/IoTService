@@ -64,9 +64,6 @@ public class ManagerController {
             return responseBody;
         }
 
-//        String managerName = params.get("managerName") == "" ? "" : params.get("managerName").toString();
-//        String password = params.get("password") == "" ? "" : params.get("password").toString();
-//        String APIKey = params.get("APIKey") == "" ? "" : params.get("APIKey").toString();
         String managerName = signUpManager.getManagerName();
         String password = signUpManager.getPassword();
         String APIKey = signUpManager.getApiKey();
