@@ -36,10 +36,10 @@ public class updateDB {
     @Autowired
     private DatapointhistoryService datapointhistoryService;
 
-    @Scheduled(fixedRate = 5000)
-    public void test(){
-        log.info("service is still running at " + new Date());
-    }
+//    @Scheduled(fixedRate = 5000)
+//    public void test(){
+//        log.info("service is still running at " + new Date());
+//    }
 
     @Scheduled(fixedRate = 360000)
 //    @Scheduled(fixedRate = 5000)
