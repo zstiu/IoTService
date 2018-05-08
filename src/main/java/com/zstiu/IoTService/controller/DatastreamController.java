@@ -3,6 +3,7 @@ package com.zstiu.IoTService.controller;
 import com.zstiu.IoTService.bean.ResponseBody;
 import com.zstiu.IoTService.domain.Datastream;
 import com.zstiu.IoTService.service.DatastreamService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/datastream")
+@Api(value = "dataStream", description = "对于数据流数据的一些读取操作")
 public class DatastreamController {
 
     private static final Logger log = LoggerFactory.getLogger(ManagerController.class);

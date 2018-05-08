@@ -1,5 +1,6 @@
 package com.zstiu.IoTService.interceptor;
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -34,7 +35,7 @@ public class AccessLoggingInterceptor implements HandlerInterceptor {
 
         Map<String, String[]> parameters = httpServletRequest.getParameterMap();
         if(!CollectionUtils.isEmpty(parameters)){
-            stringBuilder.append(": 参数为：").append(parameters);
+            stringBuilder.append(": 参数为：").append(JSON.toJSONString(parameters));
         }
 
         log.info(String.valueOf(stringBuilder));

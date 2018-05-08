@@ -3,6 +3,7 @@ package com.zstiu.IoTService.controller;
 import com.zstiu.IoTService.bean.ResponseBody;
 import com.zstiu.IoTService.domain.Device;
 import com.zstiu.IoTService.service.DeviceService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/device")
+@Api(value = "device", description = "对于设备数据的一些读取操作")
 public class DeviceController {
 
     private static final Logger log = LoggerFactory.getLogger(ManagerController.class);

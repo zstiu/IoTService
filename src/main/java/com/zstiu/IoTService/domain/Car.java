@@ -18,4 +18,8 @@ public class Car {
 
 //    @Column(nullable = false)
     private String phone;
+
+    private String carNumber;
+
+    private Long userId;
 }

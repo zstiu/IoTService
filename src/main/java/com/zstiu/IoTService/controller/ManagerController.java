@@ -13,6 +13,7 @@ import com.zstiu.IoTService.requestBody.LoginManager;
 import com.zstiu.IoTService.requestBody.SignUpManager;
 import com.zstiu.IoTService.service.UserService;
 import com.zstiu.IoTService.service.ManagerService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping("/manager")
+@Api(value = "manager", description = "管理员用户信息的一系列操作")
 public class ManagerController {
 
     private static final Logger log = LoggerFactory.getLogger(ManagerController.class);

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/user")
+@Api(value = "user", description = "普通用户(货运公司，运输公司)信息的一系列操作")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(ManagerController.class);
 
