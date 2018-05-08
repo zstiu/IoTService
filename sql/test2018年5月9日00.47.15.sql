@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 115.159.26.94
-Source Server Version : 50554
-Source Host           : 115.159.26.94:3306
+Source Server         : localhost
+Source Server Version : 50721
+Source Host           : 127.0.0.1:3306
 Source Database       : test
 
 Target Server Type    : MYSQL
-Target Server Version : 50554
+Target Server Version : 50721
 File Encoding         : 65001
 
-Date: 2018-05-07 16:44:32
+Date: 2018-05-09 00:47:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,15 +20,21 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `car`;
 CREATE TABLE `car` (
-  `id` int(20) NOT NULL,
-  `driverName` varchar(255) DEFAULT NULL,
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `driver_name` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `car_number` varchar(10) CHARACTER SET utf8 DEFAULT NULL COMMENT '容易辨别的唯一标识即可，可以是车牌号',
+  `user_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `car_user` (`user_id`),
+  CONSTRAINT `car_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of car
 -- ----------------------------
+INSERT INTO `car` VALUES ('1', 'test1', '123456', '苏A1236', null);
+INSERT INTO `car` VALUES ('2', 'tesdsvduserid', '123456', '苏Ank9snd', '9');
 
 -- ----------------------------
 -- Table structure for datapointhistory
@@ -82,18 +88,31 @@ CREATE TABLE `datastream` (
 -- ----------------------------
 -- Records of datastream
 -- ----------------------------
-INSERT INTO `datastream` VALUES ('humidity', null, null, null, 'Relative Humidity', 'RH%', '2018-05-07 16:43:49', '29566363', 'e42aefc4-8fe2-5eb8-8198-7e333d699647');
-INSERT INTO `datastream` VALUES ('humidity', null, null, null, 'Relative Humidity', 'RH%', '2018-05-07 16:43:49', '29566372', 'be918c86-fa5c-5aac-a6a6-2fd8724b68d3');
-INSERT INTO `datastream` VALUES ('location', null, 'zzz', null, null, null, '2018-05-07 16:43:49', '29566363', 'bd01dcb4-a05a-46ea-bd1d-d8fa5181431c');
-INSERT INTO `datastream` VALUES ('location', null, 'zzz', null, null, null, '2018-05-07 16:43:49', '29566372', 'c7d9a16b-9892-46d2-80e7-912a68675e4a');
-INSERT INTO `datastream` VALUES ('obliquity', null, null, null, '?', '°', '2018-05-07 16:43:49', '29566363', 'c868d81a-595f-54e7-bfb7-f5995d072ebb');
-INSERT INTO `datastream` VALUES ('obliquity', null, null, null, '?', '°', '2018-05-07 16:43:49', '29566372', '7567ef03-7d1e-517b-86ca-20b138f709d9');
-INSERT INTO `datastream` VALUES ('position', null, null, null, '', '', '2018-05-07 16:43:49', '29566363', '8ee5818c-e462-57ae-a728-b1477dbc22d3');
-INSERT INTO `datastream` VALUES ('position', null, null, null, '', '', '2018-05-07 16:43:49', '29566372', 'e3cbc30e-67a8-50d1-ac6c-d5a4e20a3d48');
-INSERT INTO `datastream` VALUES ('pressure', null, null, null, '?', 'Pa', '2018-05-07 16:43:49', '29566363', '2b6dbf87-3b34-5a72-8b21-eb6d0188ddd2');
-INSERT INTO `datastream` VALUES ('pressure', null, null, null, '?', 'Pa', '2018-05-07 16:43:49', '29566372', '5cfb3776-a124-593b-a8e7-30982140798e');
-INSERT INTO `datastream` VALUES ('temperature', null, '60', null, 'celsius', 'C', '2018-05-07 16:43:49', '29566363', '87989383-99f4-5086-a2e1-22fe2e141ab9');
-INSERT INTO `datastream` VALUES ('temperature', null, '60', null, 'celsius', 'C', '2018-05-07 16:43:49', '29566372', '430ff55d-a6fb-54c1-bf8b-09367993bcc8');
+INSERT INTO `datastream` VALUES ('humidity', null, null, null, 'Relative Humidity', 'RH%', '2018-05-09 00:44:43', '29566363', 'e42aefc4-8fe2-5eb8-8198-7e333d699647');
+INSERT INTO `datastream` VALUES ('humidity', null, null, null, 'Relative Humidity', 'RH%', '2018-05-09 00:44:42', '29566372', 'be918c86-fa5c-5aac-a6a6-2fd8724b68d3');
+INSERT INTO `datastream` VALUES ('location', null, 'zzz', null, null, null, '2018-05-09 00:44:43', '29566363', 'bd01dcb4-a05a-46ea-bd1d-d8fa5181431c');
+INSERT INTO `datastream` VALUES ('location', null, 'zzz', null, null, null, '2018-05-09 00:44:42', '29566372', 'c7d9a16b-9892-46d2-80e7-912a68675e4a');
+INSERT INTO `datastream` VALUES ('obliquity', null, null, null, '度', '°', '2018-05-09 00:44:43', '29566363', 'c868d81a-595f-54e7-bfb7-f5995d072ebb');
+INSERT INTO `datastream` VALUES ('obliquity', null, null, null, '度', '°', '2018-05-09 00:44:42', '29566372', '7567ef03-7d1e-517b-86ca-20b138f709d9');
+INSERT INTO `datastream` VALUES ('position', null, null, null, '', '', '2018-05-09 00:44:43', '29566363', '8ee5818c-e462-57ae-a728-b1477dbc22d3');
+INSERT INTO `datastream` VALUES ('position', null, null, null, '', '', '2018-05-09 00:44:42', '29566372', 'e3cbc30e-67a8-50d1-ac6c-d5a4e20a3d48');
+INSERT INTO `datastream` VALUES ('pressure', null, null, null, '帕', 'Pa', '2018-05-09 00:44:43', '29566363', '2b6dbf87-3b34-5a72-8b21-eb6d0188ddd2');
+INSERT INTO `datastream` VALUES ('pressure', null, null, null, '帕', 'Pa', '2018-05-09 00:44:42', '29566372', '5cfb3776-a124-593b-a8e7-30982140798e');
+INSERT INTO `datastream` VALUES ('temperature', null, '60', null, 'celsius', 'C', '2018-05-09 00:44:43', '29566363', '87989383-99f4-5086-a2e1-22fe2e141ab9');
+INSERT INTO `datastream` VALUES ('temperature', null, '60', null, 'celsius', 'C', '2018-05-09 00:44:42', '29566372', '430ff55d-a6fb-54c1-bf8b-09367993bcc8');
+
+-- ----------------------------
+-- Table structure for datastreampoint
+-- ----------------------------
+DROP TABLE IF EXISTS `datastreampoint`;
+CREATE TABLE `datastreampoint` (
+  `id` int(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of datastreampoint
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for device
@@ -120,8 +139,8 @@ CREATE TABLE `device` (
 -- ----------------------------
 -- Records of device
 -- ----------------------------
-INSERT INTO `device` VALUES ('29566363', null, '2018-05-07 16:43:49', null, null, 'C89346DA4373', '\0', 'HTTP', 'myedpdevice', null, null, null);
-INSERT INTO `device` VALUES ('29566372', null, '2018-05-07 16:43:49', null, null, '11111111', '\0', 'HTTP', 'myedpdevice', null, null, null);
+INSERT INTO `device` VALUES ('29566363', null, '2018-05-09 00:44:42', null, null, 'C89346DA4373', '\0', 'HTTP', 'myedpdevice', null, null, null);
+INSERT INTO `device` VALUES ('29566372', null, '2018-05-09 00:44:42', null, null, '11111111', '\0', 'HTTP', 'myedpdevice', null, null, null);
 
 -- ----------------------------
 -- Table structure for manager
@@ -151,38 +170,43 @@ INSERT INTO `manager` VALUES ('10', '2018-04-11 17:50:58', '2018-04-24 17:51:51'
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `goodsName` varchar(255) DEFAULT NULL,
-  `goodsType` varchar(255) DEFAULT NULL,
-  `goodsNumber` int(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `goods_name` varchar(255) DEFAULT NULL,
+  `goods_type` varchar(255) DEFAULT NULL,
+  `goods_number` int(20) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL COMMENT '下订单的货物公司',
+  PRIMARY KEY (`id`),
+  KEY `order_user` (`user_id`),
+  CONSTRAINT `order_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of order
 -- ----------------------------
+INSERT INTO `order` VALUES ('1', '1', '1', '10', '10');
+INSERT INTO `order` VALUES ('2', 'tesdsvduserid', '2', '20', '11');
 
 -- ----------------------------
--- Table structure for orderItem
+-- Table structure for orderitem
 -- ----------------------------
-DROP TABLE IF EXISTS `orderItem`;
-CREATE TABLE `orderItem` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `goodsNumbering` varchar(255) DEFAULT NULL,
-  `deviceNumbering` bigint(20) DEFAULT NULL COMMENT '对应device表（id还是auth_info待定）',
-  `carNumbering` int(20) DEFAULT NULL,
-  `orderNumbering` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `orderId` (`orderNumbering`),
-  KEY `deviceId` (`deviceNumbering`),
-  KEY `carId` (`carNumbering`),
-  CONSTRAINT `carId` FOREIGN KEY (`carNumbering`) REFERENCES `car` (`id`),
-  CONSTRAINT `deviceId` FOREIGN KEY (`deviceNumbering`) REFERENCES `device` (`id`),
-  CONSTRAINT `orderId` FOREIGN KEY (`orderNumbering`) REFERENCES `order` (`id`)
+DROP TABLE IF EXISTS `orderitem`;
+CREATE TABLE `orderitem` (
+  `goods_numbering` varchar(255) DEFAULT NULL,
+  `device_numbering` bigint(20) NOT NULL COMMENT '对应device表（id还是auth_info待定）',
+  `car_numbering` int(20) DEFAULT NULL,
+  `order_numbering` bigint(20) NOT NULL,
+  PRIMARY KEY (`device_numbering`,`order_numbering`),
+  KEY `carId` (`car_numbering`),
+  KEY `deviceId` (`device_numbering`),
+  KEY `orderId` (`order_numbering`),
+  CONSTRAINT `carId` FOREIGN KEY (`car_numbering`) REFERENCES `car` (`id`),
+  CONSTRAINT `deviceId` FOREIGN KEY (`device_numbering`) REFERENCES `device` (`id`),
+  CONSTRAINT `orderId` FOREIGN KEY (`order_numbering`) REFERENCES `order` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of orderItem
+-- Records of orderitem
 -- ----------------------------
+INSERT INTO `orderitem` VALUES ('tesdsvduserid', '29566363', '2', '2');
 
 -- ----------------------------
 -- Table structure for product
@@ -222,6 +246,6 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('9', null, null, null, 'test1', '123456', null, 'Cargo company');
-INSERT INTO `user` VALUES ('10', '2018-04-20 12:21:44', null, '2018-04-25 11:22:33', 'test3', '123456', null, 'Cargo company');
-INSERT INTO `user` VALUES ('11', '2018-04-20 15:48:37', null, '2018-04-20 15:48:37', 'test2', '123456', '9', 'Cargo company');
+INSERT INTO `user` VALUES ('9', null, null, null, 'test1', '123456', null, '运输公司');
+INSERT INTO `user` VALUES ('10', '2018-04-20 12:21:44', null, '2018-04-25 11:22:33', 'test3', '123456', null, '货运公司');
+INSERT INTO `user` VALUES ('11', '2018-04-20 15:48:37', null, '2018-04-20 15:48:37', 'test2', '123456', '9', '货运公司');

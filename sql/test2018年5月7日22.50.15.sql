@@ -163,10 +163,10 @@ CREATE TABLE `order` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for orderDeviceCar
+-- Table structure for orderItem
 -- ----------------------------
-DROP TABLE IF EXISTS `orderDeviceCar`;
-CREATE TABLE `orderDeviceCar` (
+DROP TABLE IF EXISTS `orderItem`;
+CREATE TABLE `orderItem` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `goods_numbering` varchar(255) DEFAULT NULL,
   `device_numbering` bigint(20) DEFAULT NULL COMMENT '对应device表（id还是auth_info待定）',
@@ -182,7 +182,7 @@ CREATE TABLE `orderDeviceCar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of orderDeviceCar
+-- Records of orderItem
 -- ----------------------------
 
 -- ----------------------------

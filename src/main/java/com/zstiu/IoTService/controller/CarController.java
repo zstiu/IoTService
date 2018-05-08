@@ -76,7 +76,7 @@ public class CarController {
         return responseBody;
     }
 
-    @ApiOperation(value="运输公司添加车辆", notes="添加成功返回车辆信息")
+    @ApiOperation(value="运输公司添加车辆", notes="添加成功返回车辆信息(访问前需先登录，带登陆后的session访问)")
     @RequestMapping(value="/", method= RequestMethod.POST)
     public ResponseBody addCar(
             HttpServletRequest request,
@@ -114,7 +114,12 @@ public class CarController {
                 log.info("车辆" + addedCar.getCarNumber() + "已添加");
 
                 responseBody.setSuccess(true);
-                responseBody.setMessage("添加成功");
+                String message;
+                message = "添加成功";
+                if(user_id == null){
+                    message += "(你未登录，所以添加的车辆信息将会缺少公司信息)";
+                }
+                responseBody.setMessage(message);
                 responseBody.setData(addedCar);
             }
             catch(Exception e){

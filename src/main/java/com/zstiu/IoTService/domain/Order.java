@@ -3,14 +3,12 @@ package com.zstiu.IoTService.domain;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@Table(name="`order`")
 public class Order {
 
     @Id
@@ -24,5 +22,7 @@ public class Order {
     private String goodsType;
 
     private Integer goodsNumber;
+
+    private Long userId;
 
 }
