@@ -25,4 +25,6 @@ public class Order {
 
     private Long userId;
 
+    private boolean complete;
+
 }

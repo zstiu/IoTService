@@ -6,7 +6,7 @@ import lombok.Data;
 public class AddOrderItem {
     private String goodsNumbering;
 
-    private Long deviceId;
+    private String deviceAuthInfo;
 
     private Long carId;
 

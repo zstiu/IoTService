@@ -10,4 +10,6 @@ public interface OrderService {
 
     public List<Order> getAll();
 
+    public List<Order> getCompletedOrder(boolean complete);
+
 }

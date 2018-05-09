@@ -23,4 +23,9 @@ public class OrderServiceImp implements OrderService {
     public List<Order> getAll() {
         return orderRepository.findAll();
     }
+
+//    @Override
+    public List<Order> getCompletedOrder(boolean complete) {
+        return orderRepository.findAllByComplete(complete);
+    }
 }

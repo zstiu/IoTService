@@ -4,6 +4,7 @@ package com.zstiu.IoTService.controller;
 import com.zstiu.IoTService.bean.ResponseBody;
 import com.zstiu.IoTService.domain.Order;
 import com.zstiu.IoTService.domain.OrderItem;
+import com.zstiu.IoTService.repository.OrderItemRepository;
 import com.zstiu.IoTService.repository.OrderRepository;
 import com.zstiu.IoTService.requestBody.AddOrder;
 import com.zstiu.IoTService.requestBody.AddOrderItem;
@@ -14,12 +15,10 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -35,18 +34,72 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
     @Autowired
+    private OrderItemRepository orderItemRepository;
+    @Autowired
     private OrderItemService orderItemService;
 
-    @ApiOperation(value="获取所有订单", notes="返回所有订单信息")
+    @ApiOperation(value="获取所有订单(complete条件查询)", notes="返回所有订单信息(或者已完成或未完成订单)")
     @RequestMapping(value="/", method= RequestMethod.GET)
     public ResponseBody getAllOrder(
+            HttpServletRequest request, HttpServletResponse response,
+            @RequestParam(value="complete", required = false) Boolean complete
     ) throws Exception {
         ResponseBody responseBody = new ResponseBody();
 
-        List<Order> orders = orderService.getAll();
+        List<Order> orders;
+        if(complete == null){
+            orders = orderService.getAll();
+        }
+        else {
+            orders = orderService.getCompletedOrder(complete);
+        }
 
         responseBody.setSuccess(true);
         responseBody.setData(orders);
+
+        return responseBody;
+    }
+
+    @ApiOperation(value="根据订单号获取订单信息", notes="返回订单信息()")
+    @RequestMapping(value="/{id}", method= RequestMethod.GET)
+    public ResponseBody getOrderById(
+            HttpServletRequest request, HttpServletResponse response,
+            @PathVariable Long id
+    ) throws Exception {
+        ResponseBody responseBody = new ResponseBody();
+
+        Order order;
+        order = orderRepository.findOne(id);
+
+        responseBody.setSuccess(true);
+
+        if (order == null){
+            responseBody.setMessage("无对应订单");
+        }
+
+        responseBody.setData(order);
+
+        return responseBody;
+    }
+
+    @ApiOperation(value="根据订单号获取订单条目", notes="返回订单条目列表")
+    @RequestMapping(value="/{orderId}/orderItem", method= RequestMethod.GET)
+    public ResponseBody getOrderItemByOrderId(
+            HttpServletRequest request, HttpServletResponse response,
+            @PathVariable Long orderId
+    ) throws Exception {
+        ResponseBody responseBody = new ResponseBody();
+
+        List<OrderItem> orderItems;
+        orderItems = orderItemRepository.findAllByOrderId(orderId);
+
+        responseBody.setSuccess(true);
+
+        if (orderItems.isEmpty()){
+            responseBody.setMessage("无对应订单条目");
+        }
+
+        responseBody.setData(orderItems);
 
         return responseBody;
     }
@@ -97,7 +150,7 @@ public class OrderController {
         return responseBody;
     }
 
-    @ApiOperation(value="货运公司完善订单操作", notes="完善成功返回订单信息（访问接口前需要货运类型的user先登录，带登陆后的session访问接口）")
+    @ApiOperation(value="货运公司添加订单项操作", notes="完善成功返回订单信息（）")
     @RequestMapping(value="/item", method= RequestMethod.POST)
     public ResponseBody addOrderItem(
             HttpServletRequest request,
@@ -109,15 +162,15 @@ public class OrderController {
         HttpSession session = request.getSession(false);
 
         String goodsNumbering = addOrderItem.getGoodsNumbering();
-        Long deviceNumbering = addOrderItem.getDeviceId();
-        Long carNumbering = addOrderItem.getCarId();
+        String deviceAuthInfo = addOrderItem.getDeviceAuthInfo();
+        Long carId = addOrderItem.getCarId();
         Long orderId = addOrderItem.getOrderId();
 
 //        OrderItem orderDeviceCar1
         orderItem.setGoodsNumbering(goodsNumbering);
-        orderItem.setDeviceNumbering(deviceNumbering);
-        orderItem.setCarNumbering(carNumbering);
-        orderItem.setOrderNumbering(orderId);
+        orderItem.setDeviceAuthInfo(deviceAuthInfo);
+        orderItem.setCarId(carId);
+        orderItem.setOrderId(orderId);
 
         try {
             OrderItem addedOrderItem = orderItemService.addOrderDeviceCar(orderItem);

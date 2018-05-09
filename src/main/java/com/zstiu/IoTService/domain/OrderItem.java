@@ -22,11 +22,11 @@ public class OrderItem {
 
     //    @Column(nullable = false)
     @Id
-    private Long deviceNumbering;
+    private String deviceAuthInfo;
 
-    private Long carNumbering;
+    private Long carId;
 
     @Id
-    private Long orderNumbering;
+    private Long orderId;
 
 }

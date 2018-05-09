@@ -7,8 +7,8 @@ import java.io.Serializable;
 @Data
 public class OrderItemPK implements Serializable {
 
-    private Long deviceNumbering;
+    private String deviceAuthInfo;
 
-    private Long orderNumbering;
+    private Long orderId;
 
 }
