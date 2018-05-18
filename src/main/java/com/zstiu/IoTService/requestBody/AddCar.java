@@ -9,4 +9,6 @@ public class AddCar {
     private String phone;
 
     private String carNumber;
+
+    private Long userId;
 }

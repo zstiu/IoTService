@@ -90,14 +90,15 @@ public class CarController {
         String carNumber = addCar.getCarNumber();
         String driverName = addCar.getDriverName();
         String phone = addCar.getPhone();
-        Long user_id = (Long) session.getAttribute("userId");
+        Long user_id = addCar.getUserId();
+//        Long user_id = (Long) session.getAttribute("userId");
+//
+//        String userName = session.getAttribute("userName").toString();
+//        String userType = session.getAttribute("userType").toString();
+//
+//        log.info("---" + user_id + "-" + userName + "-" + userType + "正在添加车辆信息");
 
-        String userName = session.getAttribute("userName").toString();
-        String userType = session.getAttribute("userType").toString();
-
-        log.info("---" + user_id + "-" + userName + "-" + userType + "正在添加车辆信息");
-
-        if(carNumber == null || driverName == null || phone == null){
+        if(carNumber == null || driverName == null || phone == null || user_id == null){
             responseBody.setMessage("缺少参数");
             return responseBody;
         }
