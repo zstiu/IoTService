@@ -29,7 +29,7 @@ public class DeviceController {
 
     @ApiOperation(value="获取所有设备", notes="返回设备列表")
     @RequestMapping(value="/all", method= RequestMethod.GET)
-    public ResponseBody signUp(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ResponseBody getAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         ResponseBody responseBody = new ResponseBody();
 
@@ -43,7 +43,7 @@ public class DeviceController {
 
     @ApiOperation(value="根据id获取设备", notes="返回设备数据")
     @RequestMapping(value="/{id}", method= RequestMethod.GET)
-    public ResponseBody signUp(HttpServletRequest request, HttpServletResponse response,
+    public ResponseBody getById(HttpServletRequest request, HttpServletResponse response,
                                @PathVariable Long id
                                ) throws Exception {
 

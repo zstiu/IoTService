@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Service
 public class UserServiceImp implements UserService {
     private static final Logger log = LoggerFactory.getLogger(ManagerServiceImp.class);
@@ -28,5 +31,18 @@ public class UserServiceImp implements UserService {
 
     public void addNewUser(User user){
         userRepository.save(user);
+    }
+
+    @Override
+    public int currentUserAuthority(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if(session.getAttribute("managerId") != null){
+            return 1;
+        }else if(session.getAttribute("userId") != null){
+            return (int) session.getAttribute("userType");
+        }else {
+            return 0;
+        }
+//        return 0;
     }
 }

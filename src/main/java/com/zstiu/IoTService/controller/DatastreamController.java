@@ -44,7 +44,7 @@ public class DatastreamController {
 
     @ApiOperation(value="根据id和device_id和获取数据流", notes="返回相应数据流")
     @RequestMapping(value="/{id}", method= RequestMethod.GET)
-    public ResponseBody signUp(HttpServletRequest request, HttpServletResponse response,
+    public ResponseBody getByIdAndDeviceId(HttpServletRequest request, HttpServletResponse response,
 //                               @PathVariable Long device_id,
                                @RequestParam("device_id") Long device_id,
                                @PathVariable String id
