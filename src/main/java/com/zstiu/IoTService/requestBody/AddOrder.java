@@ -9,4 +9,6 @@ public class AddOrder {
     private String goodsType;
 
     private Integer goodsNumber;
+
+    private Long userId;
 }

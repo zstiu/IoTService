@@ -12,4 +12,6 @@ public interface OrderService {
 
     public List<Order> getCompletedOrder(boolean complete);
 
+    public List<Order> getOrderByIdAndComplete(Long id, boolean complete);
+
 }

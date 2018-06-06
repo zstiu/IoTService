@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,21 +39,33 @@ public class OrderController {
     @Autowired
     private OrderItemService orderItemService;
 
-    @ApiOperation(value="获取所有订单(complete条件查询)", notes="返回所有订单信息(或者已完成或未完成订单)")
+    @ApiOperation(value="获取所有订单(id,complete条件查询)", notes="返回所有订单信息(id已完成或未完成订单)")
     @RequestMapping(value="/", method= RequestMethod.GET)
     public ResponseBody getAllOrder(
             HttpServletRequest request, HttpServletResponse response,
+            @RequestParam(value="id", required = false) Long id,
             @RequestParam(value="complete", required = false) Boolean complete
     ) throws Exception {
         ResponseBody responseBody = new ResponseBody();
 
-        List<Order> orders;
-        if(complete == null){
+        List<Order> orders = new ArrayList<>();
+
+        if(id != null && complete != null){
+            orders = orderService.getOrderByIdAndComplete(id, complete);
+        }else if(id != null){
+            orders.add(orderRepository.findOne(id));
+        }else if(complete != null){
+            orders = orderService.getCompletedOrder(complete);
+        }else {
             orders = orderService.getAll();
         }
-        else {
-            orders = orderService.getCompletedOrder(complete);
-        }
+
+//        if(complete == null){
+//            orders = orderService.getAll();
+//        }
+//        else {
+//            orders = orderService.getCompletedOrder(complete);
+//        }
 
         responseBody.setSuccess(true);
         responseBody.setData(orders);
@@ -118,17 +131,17 @@ public class OrderController {
         String goodsName = addOrder.getGoodsName();
         String goodsType = addOrder.getGoodsType();
         int goodsNumber = addOrder.getGoodsNumber();
-        Long userId = null;
-        try {
-            userId = (Long) session.getAttribute("userId");
-        }catch (Exception e){
-            log.error("从session获取userId时出错" + e.toString());
-        }
-
-        if(userId == null ){
-            responseBody.setMessage("请先登录（货运公司）");
-            return responseBody;
-        }
+        Long userId = addOrder.getUserId();
+//        try {
+//            userId = (Long) session.getAttribute("userId");
+//        }catch (Exception e){
+//            log.error("从session获取userId时出错" + e.toString());
+//        }
+//
+//        if(userId == null ){
+//            responseBody.setMessage("请先登录（货运公司）");
+//            return responseBody;
+//        }
 
         order.setGoodsName(goodsName);
         order.setGoodsType(goodsType);

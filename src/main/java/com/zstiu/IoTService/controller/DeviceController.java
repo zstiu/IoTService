@@ -2,6 +2,7 @@ package com.zstiu.IoTService.controller;
 
 import com.zstiu.IoTService.bean.ResponseBody;
 import com.zstiu.IoTService.domain.Device;
+import com.zstiu.IoTService.repository.DeviceRepository;
 import com.zstiu.IoTService.service.DeviceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,14 +28,30 @@ public class DeviceController {
 
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private DeviceRepository deviceRepository;
 
     @ApiOperation(value="获取所有设备", notes="返回设备列表")
     @RequestMapping(value="/all", method= RequestMethod.GET)
-    public ResponseBody getAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ResponseBody getAll(HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam(value="id", required = false) Long id
+    ) throws Exception {
 
         ResponseBody responseBody = new ResponseBody();
+        List<Device> devices = new ArrayList<>();
 
-        List<Device> devices = deviceService.getAll();
+        if(id == null){
+            devices = deviceService.getAll();
+        }else {
+//            devices = deviceRepository.
+            try {
+                Device device = deviceRepository.findOne(id);
+                devices.add(device);
+            }catch (Exception e){
+                responseBody.setMessage("参数id错误");
+                return responseBody;
+            }
+        }
 
         responseBody.setSuccess(true);
         responseBody.setData(devices);

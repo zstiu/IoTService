@@ -4,7 +4,9 @@ import com.zstiu.IoTService.bean.OnenetResponse;
 import com.zstiu.IoTService.bean.ResponseBody;
 import com.zstiu.IoTService.domain.Datapointhistory;
 import com.zstiu.IoTService.domain.Datastream;
+import com.zstiu.IoTService.domain.Datastreampoint;
 import com.zstiu.IoTService.domain.Device;
+import com.zstiu.IoTService.repository.DatastreampointRepository;
 import com.zstiu.IoTService.service.DatapointhistoryService;
 import com.zstiu.IoTService.service.DatastreamService;
 import com.zstiu.IoTService.service.DeviceService;
@@ -29,6 +31,8 @@ public class updateDB {
 
     private static final Logger log = LoggerFactory.getLogger(updateDB.class);
 
+    @Autowired
+    private DatastreampointRepository datastreampointRepository;
     @Autowired
     private DeviceService deviceService;
     @Autowired
@@ -70,6 +74,8 @@ public class updateDB {
             deviceService.updateDevice(device);
 
             updateDataStreams(Long.parseLong((String) _device.get("id")));
+            updateDatastreampoint(Long.parseLong((String) _device.get("id")));
+
 
         }
     }
@@ -111,6 +117,8 @@ public class updateDB {
 
                 datapointhistoryService.updateDatapointhistory(datapointhistory);
 
+                Datastreampoint datastreampoint = new Datastreampoint();
+
             }catch (Exception e){
                 log.info("当前数据流：" + datastream.getId() + "---" + "无数据点上传");
                 log.error(e.getMessage());
@@ -123,4 +131,100 @@ public class updateDB {
         }
 
     }
+
+    public void updateDatastreampoint(Long id){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("per_page","100");
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("api-key", "yFklxQD=vZhpdKTQYkU=FQ65Txo=");
+
+        HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);
+
+        String url = "http://api.heclouds.com/devices/" + id.toString() + "/datapoints";
+
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(url,HttpMethod.GET,requestEntity, Object.class, map);
+        HashMap<String, Object> onenetResponse = (HashMap<String, Object>) responseEntity.getBody();
+//        HashMap<String, Object> data = (HashMap<String, Object>) onenetResponse.get("data");
+
+        HashMap<String, Object> data = (HashMap<String, Object>) onenetResponse.get("data");
+        ArrayList<HashMap<String, Object>> datastreams = (ArrayList<HashMap<String, Object>>) data.get("datastreams");
+
+        Datastreampoint datastreampoint = new Datastreampoint();
+        datastreampoint.setDevice_id(id);
+
+        for (HashMap<String, Object> _datastream:datastreams){
+
+            String _id = (String) _datastream.get("id");
+            ArrayList<HashMap<String, Object>> datapoints = (ArrayList<HashMap<String, Object>>) _datastream.get("datapoints");
+            HashMap<String, Object> datapoint = datapoints.get(0);
+
+            switch (_id){
+                case "obliquity":
+                    try {
+                        if(datapoint.get("at") != null){
+                            datastreampoint.setAt(datapoint.get("at").toString());
+                        }
+                    }catch(Exception e){
+
+                    }
+                    datastreampoint.setObliquity(datapoint.get("value").toString());
+                    break;
+                case "temperature":
+                    try {
+                        if(datapoint.get("at") != null){
+                            datastreampoint.setAt(datapoint.get("at").toString());
+                        }
+                    }catch(Exception e){
+
+                    }
+                    datastreampoint.setTemperature(datapoint.get("value").toString());
+                    break;
+                case "humidity":
+                    try {
+                        if(datapoint.get("at") != null){
+                            datastreampoint.setAt(datapoint.get("at").toString());
+                        }
+                    }catch(Exception e){
+
+                    }
+                    datastreampoint.setHumidity(datapoint.get("value").toString());
+                    break;
+                case "location":
+                    try {
+                        if(datapoint.get("at") != null){
+                            datastreampoint.setAt(datapoint.get("at").toString());
+                        }
+                    }catch(Exception e){
+
+                    }
+                    datastreampoint.setLocation(datapoint.get("value").toString());
+                    break;
+                case "position":
+                    try {
+                        if(datapoint.get("at") != null){
+                            datastreampoint.setAt(datapoint.get("at").toString());
+                        }
+                    }catch(Exception e){
+
+                    }
+                    datastreampoint.setPosition(datapoint.get("value").toString());
+                    break;
+                case "pressure":
+                    try {
+                        if(datapoint.get("at") != null){
+                            datastreampoint.setAt(datapoint.get("at").toString());
+                        }
+                    }catch(Exception e){
+
+                    }
+                    datastreampoint.setPressure(datapoint.get("value").toString());
+                    break;
+            }
+        }
+        datastreampointRepository.saveAndFlush(datastreampoint);
+
+    }
+
 }

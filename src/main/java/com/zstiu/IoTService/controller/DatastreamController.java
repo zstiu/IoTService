@@ -2,6 +2,8 @@ package com.zstiu.IoTService.controller;
 
 import com.zstiu.IoTService.bean.ResponseBody;
 import com.zstiu.IoTService.domain.Datastream;
+import com.zstiu.IoTService.domain.Datastreampoint;
+import com.zstiu.IoTService.repository.DatastreampointRepository;
 import com.zstiu.IoTService.service.DatastreamService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,6 +23,8 @@ public class DatastreamController {
 
     private static final Logger log = LoggerFactory.getLogger(ManagerController.class);
 
+    @Autowired
+    private DatastreampointRepository datastreampointRepository;
     @Autowired
     private DatastreamService datastreamService;
 
@@ -56,6 +60,24 @@ public class DatastreamController {
 
         responseBody.setSuccess(true);
         responseBody.setData(datastream);
+
+        return responseBody;
+
+    }
+
+    @ApiOperation(value="根据device_id获取所有数据点", notes="返回设备数据点列表")
+    @RequestMapping(value="/datapoint", method= RequestMethod.GET)
+    public ResponseBody getAllDatapoint(HttpServletRequest request, HttpServletResponse response,
+//                               @PathVariable Long device_id
+                                      @RequestParam("device_id") Long device_id
+    ) throws Exception {
+
+        ResponseBody responseBody = new ResponseBody();
+
+        List<Datastreampoint> datastreampoints = datastreampointRepository.findAllDatapoint(device_id);
+
+        responseBody.setSuccess(true);
+        responseBody.setData(datastreampoints);
 
         return responseBody;
 

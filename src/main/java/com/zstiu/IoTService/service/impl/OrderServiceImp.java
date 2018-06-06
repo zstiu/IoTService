@@ -28,4 +28,10 @@ public class OrderServiceImp implements OrderService {
     public List<Order> getCompletedOrder(boolean complete) {
         return orderRepository.findAllByComplete(complete);
     }
+
+    @Override
+    public List<Order> getOrderByIdAndComplete(Long id, boolean complete) {
+
+        return orderRepository.findAllByIdAndComplete(id, complete);
+    }
 }
