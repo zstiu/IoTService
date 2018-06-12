@@ -1,0 +1,59 @@
+{
+  "name": "@icedesign/creator-landingpage-scaffold",
+  "version": "1.0.0",
+  "description": "智能物流",
+  "homepage": "https://alibaba.github.io/ice/scaffold-preview/ice-creator-landingpage.html",
+  "dependencies": {
+    "@icedesign/base": "^0.2.1",
+    "@icedesign/container": "^0.1.2",
+    "@icedesign/data-binder": "^0.1.1",
+    "@icedesign/form-binder": "^0.1.4",
+    "@icedesign/icon": "^0.1.1",
+    "@icedesign/img": "^0.1.1",
+    "@icedesign/label": "^0.1.2",
+    "@icedesign/layout": "^0.1.2",
+    "@icedesign/menu": "^0.1.0",
+    "@icedesign/skin": "^0.1.0",
+    "axios": "^0.18.0",
+    "bizcharts": "^3.1.8",
+    "classnames": "^2.2.5",
+    "enquire-js": "^0.1.3",
+    "foundation-symbol": "^0.1.3",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.2",
+    "react-document-title": "^2.0.3",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-trello": "^1.31.3",
+    "styled-components": "^3.2.6"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.3",
+    "eslint": "^4.13.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.5.1",
+    "ice-scripts": "^1.1.1"
+  },
+  "scripts": {
+    "start": "ice dev",
+    "build": "ice build",
+    "lint": "eslint . --ext '.js,.jsx' --fix"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.com",
+    "access": "public"
+  },
+  "buildConfig": {
+    "theme": "@icedesign/skin",
+    "entry": "src/index.js"
+  },
+  "scaffoldConfig": {
+    "name": "ice-creator-landingpage",
+    "title": "ICE Creator LandingPage",
+    "screenshot": "https://img.alicdn.com/tfs/TB1WcWtqMmTBuNjy1XbXXaMrVXa-2840-1596.png"
+  },
+  "title": "智能物流网站"
+}
